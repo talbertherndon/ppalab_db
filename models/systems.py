@@ -9,14 +9,15 @@ class System(BaseModel):
     product_name: str
     system_type: str
     memory_type: str
-    memory_size: int
+    memory_size: str
     memory_speed: str
     qdf: Optional[str]
     kvm: str
-    kvm_port: Optional[int]
-    power_level: int
+    kvm_port: Optional[str]
+    power_level: str
     status: str
     link: str
+    system_category: str
 
     class Config:
         from_attributes = True

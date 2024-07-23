@@ -1,37 +1,191 @@
 from pymongo import MongoClient
-from bson import ObjectId
-from database import system_collection
-import random
+from config.database import system_collection
 
-# Sample data
-vendors = ["Intel", "AMD", "NVIDIA"]
-families = ["RPL", "Zen", "Ampere"]
-product_names = ["i9-13900K", "Ryzen 9 5950X", "RTX 3090"]
-system_types = ["RVP", "Desktop", "Workstation"]
-memory_types = ["DDR4", "DDR5"]
-memory_speeds = ["3200MHz", "3600MHz", "4000MHz"]
-statuses = ["Up", "Down", "Maintenance"]
+def insert_systems(systems):
+    for system in systems:
+        system_collection.insert_one(system)
+    print(f"Database populated with {len(systems)} systems.")
 
-def generate_random_system():
-    return {
-        "vendor": random.choice(vendors),
-        "family": random.choice(families),
-        "product_name": random.choice(product_names),
-        "system_type": random.choice(system_types),
-        "memory_type": random.choice(memory_types),
-        "memory_size": random.choice([16, 32, 64, 128]),
-        "memory_speed": random.choice(memory_speeds),
-        "qdf": f"Q{random.randint(100000, 999999)}",
-        "kvm": f"KVM{random.randint(1, 20)}",
-        "kvm_port": random.randint(1, 10),
-        "power_level": random.randint(50, 300),
-        "status": random.choice(statuses),
-        "link": f"http://kvm-link-{random.randint(1000, 9999)}.example.com"
+client_systems = [
+    {
+        "system_id": "1",
+        "vendor": "Intel",
+        "family": "RPL",
+        "product_name": "i9-13900K",
+        "system_type": "RVP",
+        "memory_type": "DDR5",
+        "memory_size": "32GB",
+        "memory_speed": "3200MHz",
+        "qdf": "NA",
+        "kvm": "1",
+        "kvm_port": "4",
+        "power_level": "125W",
+        "status": "Up",
+        "link": "Direct link to the machine on KVM",
+        "system_category": "client"
+    },
+    {
+        "system_id": "2",
+        "vendor": "Intel",
+        "family": "LNL",
+        "product_name": "Ultra7-266V",
+        "system_type": "RVP",
+        "memory_type": "LPDDR5",
+        "memory_size": "16GB",
+        "memory_speed": "8600MHz",
+        "qdf": "Q5HJ",
+        "kvm": "1",
+        "kvm_port": "17",
+        "power_level": "17W",
+        "status": "Up",
+        "link": "",
+        "system_category": "client"
+    },
+    {
+        "system_id": "3",
+        "vendor": "Intel",
+        "family": "LNL",
+        "product_name": "Ultra9-",
+        "system_type": "RVP",
+        "memory_type": "LPDDR5",
+        "memory_size": "32GB",
+        "memory_speed": "8600MHz",
+        "qdf": "L0LG",
+        "kvm": "1",
+        "kvm_port": "16",
+        "power_level": "30W",
+        "status": "Up",
+        "link": "",
+        "system_category": "client"
+    },
+    {
+        "system_id": "4",
+        "vendor": "Intel",
+        "family": "ARL",
+        "product_name": "Ultra9-285K",
+        "system_type": "RVP",
+        "memory_type": "DDR5",
+        "memory_size": "64GB",
+        "memory_speed": "5600MHz",
+        "qdf": "Q5HA",
+        "kvm": "1",
+        "kvm_port": "7",
+        "power_level": "125W",
+        "status": "Up",
+        "link": "",
+        "system_category": "client"
+    },
+    {
+        "system_id": "5",
+        "vendor": "Intel",
+        "family": "MTL",
+        "product_name": "Ultra9-165U",
+        "system_type": "RVP",
+        "memory_type": "LPDDR5",
+        "memory_size": "32GB",
+        "memory_speed": "6400MHz",
+        "qdf": "Q42C",
+        "kvm": "1",
+        "kvm_port": "18",
+        "power_level": "15W",
+        "status": "Up",
+        "link": "",
+        "system_category": "client"
+    },
+    {
+        "system_id": "6",
+        "vendor": "Intel",
+        "family": "MTL",
+        "product_name": "Ultra7-165H",
+        "system_type": "RVP",
+        "memory_type": "LPDDR5",
+        "memory_size": "32GB",
+        "memory_speed": "6400MHz",
+        "qdf": "Q21W",
+        "kvm": "1",
+        "kvm_port": "8",
+        "power_level": "28W",
+        "status": "Up",
+        "link": "",
+        "system_category": "client"
     }
+]
 
-# Generate and insert 50 random systems
-for _ in range(50):
-    system = generate_random_system()
-    system_collection.insert_one(system)
+data_center_systems = [
+    {
+        "system_id": "7",
+        "vendor": "Intel",
+        "family": "EMR",
+        "product_name": "8592+",
+        "system_type": "RVP",
+        "memory_type": "DDR5",
+        "memory_size": "512GB",
+        "memory_speed": "5600 MT/s",
+        "qdf": "Q2SR",
+        "kvm": "",
+        "kvm_port": "",
+        "power_level": "350W",
+        "status": "Up",
+        "link": "vnc 143.183.30.140",
+        "system_category": "datacenter"
+    },
+    {
+        "system_id": "8",
+        "vendor": "Intel",
+        "family": "GNR-AP",
+        "product_name": "TBD",
+        "system_type": "RVP",
+        "memory_type": "DDR5-MCR",
+        "memory_size": "1536GB",
+        "memory_speed": "8800 MT/s",
+        "qdf": "Q4WC",
+        "kvm": "",
+        "kvm_port": "",
+        "power_level": "550W",
+        "status": "Up",
+        "link": "https://143.183.30.182/?next=/login#/",
+        "system_category": "datacenter"
+    },
+    {
+        "system_id": "9",
+        "vendor": "AMD",
+        "family": "Genoa",
+        "product_name": "9654",
+        "system_type": "OEM",
+        "memory_type": "DDR5",
+        "memory_size": "1536GB",
+        "memory_speed": "4800 MT/s",
+        "qdf": "",
+        "kvm": "",
+        "kvm_port": "",
+        "power_level": "360W",
+        "status": "Up",
+        "link": "https://143.183.30.139/",
+        "system_category": "datacenter"
+    },
+    {
+        "system_id": "10",
+        "vendor": "AMD",
+        "family": "Bergamo",
+        "product_name": "9754",
+        "system_type": "OEM",
+        "memory_type": "DDR5",
+        "memory_size": "1536GB",
+        "memory_speed": "4800 MT/s",
+        "qdf": "",
+        "kvm": "",
+        "kvm_port": "",
+        "power_level": "360W",
+        "status": "Up",
+        "link": "https://143.183.30.169/",
+        "system_category": "datacenter"
+    }
+]
 
-print("Database populated with 50 random systems.")
+# Insert client systems
+insert_systems(client_systems)
+
+# Insert data center systems
+insert_systems(data_center_systems)
+
+print("All systems have been inserted into the database.")
