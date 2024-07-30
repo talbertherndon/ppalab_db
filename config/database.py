@@ -7,5 +7,6 @@ client = MongoClient(uri)
 db = client.reservation_db
 
 system_collection = db["systems"]
-accounting_collection = db["accounting"]
+run_collection = db["runs"]
+workloads_collection = db["workloads"]
 

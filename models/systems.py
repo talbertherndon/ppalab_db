@@ -1,4 +1,4 @@
-from typing import List, Dict, Optional
+from typing import List, Optional, Dict, Any
 from pydantic import BaseModel
 from datetime import datetime
 
@@ -42,4 +42,36 @@ class Accounting(BaseModel):
     end_date: datetime
     type: str = "New"
     
-    
+class Workload(BaseModel):
+    Default_scenario: List[str]
+    RunType: str
+    Score: Dict[str, Any]
+    Tools: Optional[Dict[str, Any]] = None
+    WorkloadVersion: Optional[str] = None
+    _id: str
+    image: str
+    image_path: Optional[str] = None
+    iteration_number: str
+    status: str
+
+class Config(BaseModel):
+    MAC: str
+    _id: str
+    hostname: str
+    kvm: str
+    lab_name: str
+    status: str
+    workloads: List[Workload]
+
+class RunData(BaseModel):
+    configs: List[Config]
+    maestro_link: str
+    name: str
+    regression: str
+    regression_test: str
+    purpose: Optional[str] = None
+    run_date: str
+    end_date: Optional[str] = None
+    status: str
+    user_email: str
+    workloads: List[Dict[str, Any]]

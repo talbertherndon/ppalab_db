@@ -1,0 +1,7 @@
+applications:
+- name: python-hello
+  buildpacks:
+  - python_buildpack
+  random-route: true
+  command: python3 main.py
+  memory: 128M
