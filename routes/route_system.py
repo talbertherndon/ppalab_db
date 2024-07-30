@@ -31,18 +31,18 @@ async def create_system(system: System):
     created_system = system_collection.find_one({"_id": result.inserted_id})
     return individual_serial(created_system)
 
-# PUT Request Method to update a system
-# @router.put("/systems/{id}", response_model=System)
-# async def update_system(id: str, system: System):
-#     updated_system = system.dict(exclude={"id"})  # Convert to dict and exclude id
-#     result = system_collection.find_one_and_update(
-#         {"_id": ObjectId(id)},
-#         {"$set": updated_system},
-#         return_document=True
-#     )
-#     if result:
-#         return individual_serial(result)
-#     raise HTTPException(status_code=404, detail="System not found")
+#PUT Request Method to update a system
+@router.put("/systems/{id}", response_model=System)
+async def update_system(id: str, system: System):
+    updated_system = system.dict(exclude={"id"})  # Convert to dict and exclude id
+    result = system_collection.find_one_and_update(
+        {"_id": ObjectId(id)},
+        {"$set": updated_system},
+        return_document=True
+    )
+    if result:
+        return individual_serial(result)
+    raise HTTPException(status_code=404, detail="System not found")
 
 # # DELETE Request Method to delete a system
 # @router.delete("/systems/{id}", response_model=dict)
