@@ -1,5 +1,5 @@
 from typing import List, Optional, Dict, Any
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
 
 class System(BaseModel):
@@ -66,7 +66,7 @@ class Config(BaseModel):
 class RunData(BaseModel):
     configs: List[Config]
     maestro_link: str
-    name: str
+    name: str = Field(..., min_length=1, max_length=100, description="Name of the run (must be unique)")
     regression: str
     regression_test: str
     purpose: Optional[str] = None
