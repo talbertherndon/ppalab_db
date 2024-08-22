@@ -1,46 +1,44 @@
 from typing import List, Optional, Dict, Any
 from pydantic import BaseModel, Field
 from datetime import datetime
+from bson import ObjectId
+from uuid import UUID, uuid4
 
 class System(BaseModel):
-    id: str
-    vendor: str
-    family: str
-    product_name: str
-    system_type: str
-    memory_type: str
-    memory_size: str
-    memory_speed: str
-    qdf: Optional[str]
-    kvm: str
-    kvm_port: Optional[str]
-    power_level: str
-    status: str
-    link: str
+    system_id: str
+    vendor: Optional[str] = None
+    family: Optional[str] = None
+    product_name: Optional[str] = None
+    system_type: Optional[str] = None
+    memory_type: Optional[str] = None
+    memory_size: Optional[str] = None
+    memory_speed: Optional[str] = None
+    qdf: Optional[str] = None
+    kvm: Optional[str] = None
+    kvm_port: Optional[str] = None
+    power_level: Optional[str] = None
+    status: Optional[str] = None
+    link: Optional[str] = None
     system_category: str
+        
+class SystemUpdate(BaseModel):
+    vendor: Optional[str] = None
+    family: Optional[str] = None
+    product_name: Optional[str] = None
+    system_type: Optional[str] = None
+    memory_type: Optional[str] = None
+    memory_size: Optional[str] = None
+    memory_speed: Optional[str] = None
+    qdf: Optional[str] = None
+    kvm: Optional[str] = None
+    kvm_port: Optional[str] = None
+    power_level: Optional[str] = None
+    status: Optional[str] = None
+    link: Optional[str] = None
+    system_category: Optional[str] = None
 
     class Config:
         from_attributes = True
-        
-
-
-
-class Accounting(BaseModel):
-    id: str
-    name: str
-    run_type: str
-    purpose: str
-    user_email: str
-    workloads: List[str]
-    use_existing_image: str
-    skuCustom: Dict = {}
-    skuOotb: Dict = {}
-    regressionTest: str = "No"
-    configs: Dict = {}
-    schedule: str = "1m"
-    start_date: datetime
-    end_date: datetime
-    type: str = "New"
     
 class Workload(BaseModel):
     Default_scenario: List[str]
@@ -71,7 +69,24 @@ class RunData(BaseModel):
     regression_test: str
     purpose: Optional[str] = None
     run_date: str
-    end_date: Optional[str] = None
+    endDate: Optional[str] = None
     status: str
     user_email: str
     workloads: List[Dict[str, Any]]
+
+class RunDataUpdate(BaseModel):
+    configs: Optional[List[Config]] = None
+    maestro_link: Optional[str] = None
+    regression: Optional[str] = None
+    regression_test: Optional[str] = None
+    purpose: Optional[str] = None
+    run_date: Optional[str] = None
+    endDate: Optional[str] = None
+    status: Optional[str] = None
+    user_email: Optional[str] = None
+    workloads: Optional[List[Dict[str, Any]]] = None
+
+    class Config:
+        arbitrary_types_allowed = True
+        
+        
