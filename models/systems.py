@@ -59,9 +59,13 @@ class Config(BaseModel):
     kvm: str
     lab_name: str
     status: str
+    startDate: Optional[str] = None
+    endDate: Optional[str] = None
     workloads: List[Workload]
+    
 
 class RunData(BaseModel):
+    run_id: str
     configs: List[Config]
     maestro_link: str
     name: str = Field(..., min_length=1, max_length=100, description="Name of the run (must be unique)")

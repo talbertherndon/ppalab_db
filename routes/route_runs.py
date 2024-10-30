@@ -6,36 +6,24 @@ from fastapi.encoders import jsonable_encoder
 from models.systems import RunData, RunDataUpdate
 from typing import List, Dict
 
+import uuid
+
 router = APIRouter()
 
 # CRUD for RegressionData (now referred to as Run)
 @router.post("/run", response_model=RunData)
 async def create_run(run: RunData):
-    try:
-        # First, check if a run with this name already exists
-        existing_run = run_collection.find_one({"name": run.name})
-        if existing_run:
-            raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-                detail=f"A run with the name '{run.name}' already exists"
-            )
-        
-        # If no existing run, proceed with insertion
-        result = run_collection.insert_one(run.dict())
-        created_run = run_collection.find_one({"_id": result.inserted_id})
-        return created_run
-    except DuplicateKeyError:
-        # This catches any race condition where a duplicate might slip through
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail=f"A run with the name '{run.name}' already exists"
-        )
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    # If no existing run, proceed with insertion
+    new_run = run.dict(exclude={"id","run_id"}, exclude_unset=True)
+    new_run["run_id"] = str(uuid.uuid4())
+    
+    result = run_collection.insert_one(new_run)
+    created_run = run_collection.find_one({"_id": result.inserted_id})
+    return created_run
 
-@router.get("/run/{run_name}", response_model=RunData)
-async def read_run(run_name: str):
-    run = run_collection.find_one({"name": run_name})
+@router.get("/run/{id}", response_model=RunData)
+async def read_run(id: str):
+    run = run_collection.find_one({"run_id": id})
     if run:
         return run
     raise HTTPException(status_code=404, detail="Run not found")
@@ -44,9 +32,14 @@ async def read_run(run_name: str):
 async def read_runs():
     return list(run_collection.find())
 
-@router.patch("/run/{run_name}", response_model=RunData)
-async def update_run(run_name: str, run_update: RunDataUpdate = Body(...)):
-    existing_run = run_collection.find_one({"name": run_name})
+@router.get("/runs_by_email/{email}", response_model=List[RunData])
+async def read_runs_by_user(email: str):
+    return list(run_collection.find({"user_email":email}))
+        
+
+@router.patch("/run/{run_id}", response_model=RunData)
+async def update_run(run_id: str, run_update: RunDataUpdate = Body(...)):
+    existing_run = run_collection.find_one({"run_id": run_id})
     if not existing_run:
         raise HTTPException(status_code=404, detail="Run not found")
 
@@ -54,7 +47,7 @@ async def update_run(run_name: str, run_update: RunDataUpdate = Body(...)):
     
     if update_data:
         updated = run_collection.find_one_and_update(
-            {"name": run_name},
+            {"run_id": run_id},
             {"$set": jsonable_encoder(update_data)},
             return_document=True
         )
