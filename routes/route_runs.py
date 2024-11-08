@@ -35,7 +35,22 @@ async def read_runs():
 @router.get("/runs_by_email/{email}", response_model=List[RunData])
 async def read_runs_by_user(email: str):
     return list(run_collection.find({"user_email":email}))
-        
+
+@router.get("/runs_by_system/{system}", response_model=List[RunData])
+async def read_runs_by_system(system: str):
+    runs = list(run_collection.find())
+    filtered_runs = []
+    
+    for run in runs:
+        # Check if configs exists and is not empty
+        if "configs" in run and run["configs"]:
+            # Look for matching hostname in configs array
+            for config in run["configs"]:
+                if config.get("hostname") == system:
+                    filtered_runs.append(run)
+                    break  # Break once we find a match in this run's configs
+    
+    return filtered_runs
 
 @router.patch("/run/{run_id}", response_model=RunData)
 async def update_run(run_id: str, run_update: RunDataUpdate = Body(...)):
