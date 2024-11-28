@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from routes.route_system import router as system_router
 from routes.route_runs import router as runs_router
 from routes.route_workloads import router as workloads_router
+from routes.route_metrics import router as metrics_router
 
 app = FastAPI()
 
@@ -23,6 +24,7 @@ app.add_middleware(
 app.include_router(system_router, tags=["Systems"])
 app.include_router(runs_router, tags=["Runs"])
 app.include_router(workloads_router, tags=["Workloads"])
+app.include_router(metrics_router, tags=["Metrics"])
 
 
 

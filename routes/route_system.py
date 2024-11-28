@@ -30,7 +30,7 @@ async def create_system(system: System):
     new_system = system.dict(exclude={"id","system_id"}, exclude_unset=True)  # Convert to dict and exclude id
     system_count = system_collection.count_documents({})
     new_system["system_id"] = str(system_count + 1)
-
+    print(new_system)
     result = system_collection.insert_one(new_system)
     
     created_system = system_collection.find_one({"_id": result.inserted_id})

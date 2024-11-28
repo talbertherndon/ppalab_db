@@ -6,6 +6,7 @@ from uuid import UUID, uuid4
 
 class System(BaseModel):
     system_id: str
+    tags: Optional[List[str]] = None
     vendor: Optional[str] = None
     family: Optional[str] = None
     product_name: Optional[str] = None
@@ -20,9 +21,11 @@ class System(BaseModel):
     status: Optional[str] = None
     link: Optional[str] = None
     system_category: str
+
         
 class SystemUpdate(BaseModel):
     vendor: Optional[str] = None
+    tags: Optional[List[str]] = None
     family: Optional[str] = None
     product_name: Optional[str] = None
     system_type: Optional[str] = None
